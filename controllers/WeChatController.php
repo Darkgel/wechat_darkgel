@@ -35,7 +35,7 @@ class WeChatController extends Controller
     {
         return $this->render('index');
     }
-    public function actionCheckSignature()
+    private function checkSignature()
     {
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
@@ -53,6 +53,10 @@ class WeChatController extends Controller
         }else{
             return false;
         }
+    }
+
+    public function actionWeChatHandler(){
+        return $this->checkSignature();
     }
 
 }
