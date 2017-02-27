@@ -40,6 +40,7 @@ class WeChatController extends Controller
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
+        $echostr = $_GET["echostr"];
 
         $token = "youarenotdarkgel";
         $tmpArr = array($token, $timestamp, $nonce);
@@ -48,7 +49,7 @@ class WeChatController extends Controller
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
-            return true;
+            return $echostr;
         }else{
             return false;
         }
