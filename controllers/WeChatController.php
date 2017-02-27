@@ -37,7 +37,6 @@ class WeChatController extends Controller
     }
     public function actionCheckSignature()
     {
-        echo "iamdarkgel";exit;
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
