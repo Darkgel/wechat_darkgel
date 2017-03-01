@@ -57,15 +57,16 @@ class WeChatController extends Controller
 
     public function actionWeChatHandler(){
         //return $this->checkSignature();
-        $accessToken = $this->getAccessToken();
-        echo "<pre>";
-        var_dump($accessToken);
-        echo "</pre>";
+//        $accessToken = $this->getAccessToken();
+//        echo "<pre>";
+//        var_dump($accessToken);
+//        echo "</pre>";
+        $this->setMenu();
     }
 
     /**
+     *功能：获取access_token
      * @author shiweihua
-     * @use 获取access_token
      *
      * */
     public function getAccessToken(){
@@ -91,5 +92,72 @@ class WeChatController extends Controller
             return $dataAsArray['access_token'];
         }
         return $accessToken;
+    }
+
+
+    /**
+     * 功能：设置菜单
+     * @author shiweihua
+     * */
+    private function setMenu(){
+        $accessToken = $this->getAccessToken();
+        $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$accessToken;
+        $Token = Yii::$app->request->get('token');
+        if('darkgel' == $Token) {
+            $button1_1 = new \stdClass();
+            $button1_1->type = "view";
+            $button1_1->name = "搜狗搜索";
+            $button1_1->url = "http://www.soso.com/";
+
+            $button1_2 = new \stdClass();
+            $button1_2->type = "view";
+            $button1_2->name = "百度搜索";
+            $button1_2->url = "http://www.baidu.com/";
+
+            $button1_3 = new \stdClass();
+            $button1_3->type = "view";
+            $button1_3->name = "新浪";
+            $button1_3->url = "http://www.sina.com.cn/";
+
+            $button1 = new \stdClass();
+            $button1->name = "网站";
+            $button1->sub_button = array($button1_1,$button1_2,$button1_3);
+
+            $button2 = new \stdClass();
+            $button2->type = "click";
+            $button2->name = "文字游戏";
+            $button2->key = "V333_WORD_GAME";
+
+            $button3 = new \stdClass();
+            $button3->type = "pic_weixin";
+            $button3->name = "发张图片";
+            $button3->key = "V333_PIC";
+            $button3->sub_button = [];
+
+            $button = array($button1, $button2, $button3);
+
+            $menu = new \stdClass();
+            $menu->button = $button;
+
+            //初始化
+            $curl = curl_init();
+            //设置抓取的url
+            curl_setopt($curl, CURLOPT_URL, $url);
+            //设置获取的信息以文件流的形式返回，而不是直接输出。
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            //设置post方式提交
+            curl_setopt($curl, CURLOPT_POST, 1);
+            //设置post数据
+            $post_data = json_encode($menu, JSON_UNESCAPED_UNICODE);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+            //执行命令
+            $data = curl_exec($curl);
+            //关闭URL请求
+            curl_close($curl);
+            //显示获得的数据
+            print_r($data);
+        }else{
+            echo "非法请求";
+        }
     }
 }
