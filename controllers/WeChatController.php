@@ -61,17 +61,19 @@ class WeChatController extends Controller
 //        echo "<pre>";
 //        var_dump($accessToken);
 //        echo "</pre>";
+        $this->getAccessToken(true);
         $this->setMenu();
     }
 
     /**
      *功能：获取access_token
      * @author shiweihua
-     *
+     * @param bool $refresh 是否刷新access_token,默认不刷新
+     * @return string 返回access_token
      * */
-    public function getAccessToken(){
+    public function getAccessToken($refresh=false){
         $accessToken = Yii::$app->cache->get("accessToken");
-        if(false === $accessToken){
+        if($refresh||false === $accessToken){
 //            $appId = "wx65fe8c42d8a79457";
 //            $secret = "c1b26c4873f86771633a6169b6b08b6e";
             //测试号
