@@ -61,8 +61,13 @@ class WeChatController extends Controller
 //        echo "<pre>";
 //        var_dump($accessToken);
 //        echo "</pre>";
-        $this->getAccessToken(true);
-        $this->setMenu();
+//        $this->setMenu();
+        //接收微信服务器发过来的xml数据
+        $input = file_get_contents("php://input"); //接收POST数据
+        $xml = simplexml_load_string($input); //提取POST数据为simplexml对象
+        echo "<pre>";
+        var_dump($xml);
+        echo "</pre>";
     }
 
     /**
@@ -165,4 +170,6 @@ class WeChatController extends Controller
             echo "非法请求";
         }
     }
+
+
 }
