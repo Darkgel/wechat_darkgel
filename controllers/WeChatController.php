@@ -56,7 +56,8 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-        return $this->checkSignature();
+        //return $this->checkSignature();
+        $this->getAccessToken();
     }
 
     /**
