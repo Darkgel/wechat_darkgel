@@ -63,13 +63,13 @@ class WeChatController extends Controller
 //        echo "</pre>";
 //        $this->setMenu();
         //接收微信服务器发过来的xml数据
-        $input = file_get_contents("php://input"); //接收POST数据
+/*        $input = file_get_contents("php://input"); //接收POST数据
         $xml = simplexml_load_string($input); //提取POST数据为simplexml对象
-        Yii::$app->cache->set("xml",$xml);
-//        $xml = Yii::$app->cache->set("xml");
-//        echo "<pre>";
-//        var_dump($xml);
-//        echo "</pre>";
+        Yii::$app->cache->set("xml",$xml);*/
+        $xml = Yii::$app->cache->set("xml");
+        echo "<pre>";
+        var_dump($xml);
+        echo "</pre>";
     }
 
     /**
