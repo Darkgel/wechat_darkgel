@@ -14,6 +14,7 @@ use app\models\ContactForm;
 
 class WeChatController extends Controller
 {
+    const DEBUG = true;
     /**
      * @inheritdoc
      */
@@ -56,21 +57,10 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-        //return $this->checkSignature();
-//       $this->getAccessToken(true);
+        $this->responseMsg();
 //        echo "<pre>";
-//        var_dump($accessToken);
+//        var_dump(Yii::$app->cache->get("postXml"));
 //        echo "</pre>";
-//        $this->setMenu();
-        //接收微信服务器发过来的xml数据
-//        $input = file_get_contents("php://input"); //接收POST数据
-//        $xml = serialize(simplexml_load_string($input)); //提取POST数据为simplexml对象并序列化
-//        Yii::$app->cache->set("xml",$xml);
-        $xmlString = Yii::$app->cache->get("xml");
-        $xml = unserialize($xmlString);
-        echo "<pre>";
-        var_dump($xml);
-        echo "</pre>";
     }
 
     /**
@@ -175,4 +165,54 @@ class WeChatController extends Controller
     }
 
 
+    public function responseMsg()
+    {
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+
+        if (!empty($postStr)){
+            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            define('FROM_USER_NAME', $postObj->FromUserName);
+            define('TO_USER_NAME', $postObj->ToUserName);
+            $msgType = $postObj->MsgType;
+
+            //将信息存储到缓存中
+            Yii::$app->cache->set("postXml",$postStr);
+
+            $this->handleMessage($msgType, $postObj);
+
+        }else {
+            echo '';
+            exit;
+        }
+    }
+
+    protected function handleMessage($msgType, $oMessage)
+    {
+        switch ($msgType) {
+//            case 'text':
+//                TextMessage::handle($oMessage);
+//                break;
+//            case 'image':
+//                ImageMessage::handle($oMessage);
+//                break;
+//            case 'voice':
+//                VoiceMessage::handle($oMessage);
+//                break;
+//            case 'video':
+//                VideoMessage::handle($oMessage);
+//                break;
+//            case 'location':
+//                LocationMessage::handle($oMessage);
+//                break;
+//            case 'link':
+//                LinkMessage::handle($oMessage);
+//                break;
+//            case 'event':
+//                EventMessage::handle($oMessage);
+//                break;
+            default:
+                echo '';
+                exit;
+        }
+    }
 }
