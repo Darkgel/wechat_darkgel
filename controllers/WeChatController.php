@@ -222,53 +222,73 @@ class WeChatController extends Controller
     public function responseMsgs()
     {
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $fromUsername = $postObj->FromUserName;//发送人
+        $toUsername = $postObj->ToUserName;//接收人
+        $MsgType = $postObj->MsgType;//消息类型
+        //$MsgId = $postObj->MsgId;//消息id
+        $time = time();//当前时间做为回复时间
+        $content = "hello";
+        $textTpl = "<xml>  
+                    <ToUserName><![CDATA[%s]]></ToUserName>  
+                    <FromUserName><![CDATA[%s]]></FromUserName>  
+                    <CreateTime>%s</CreateTime>  
+                    <MsgType><![CDATA[%s]]></MsgType>  
+                    <Content><![CDATA[%s]]></Content>  
+                    </xml>";
+        $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
+        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $MsgType, $contentStr);
+        echo $resultStr;
+        exit;
+
+        //$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         //提取post数据
-        if (!empty($postStr)) {
-            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $fromUsername = $postObj->FromUserName;//发送人
-            $toUsername = $postObj->ToUserName;//接收人
-            $MsgType = $postObj->MsgType;//消息类型
-            //$MsgId = $postObj->MsgId;//消息id
-            $time = time();//当前时间做为回复时间
-
-            //如果是文本消息（表情属于文本信息）
-            if ($MsgType == 'text') {
-                $content = trim($postObj->Content);//消息内容
-                if (!empty($content)) {
-                    //回复文本信息
-                    $textTpl = "<xml>  
-                                    <ToUserName><![CDATA[%s]]></ToUserName>  
-                                    <FromUserName><![CDATA[%s]]></FromUserName>  
-                                    <CreateTime>%s</CreateTime>  
-                                    <MsgType><![CDATA[%s]]></MsgType>  
-                                    <Content><![CDATA[%s]]></Content>  
-                                    <FuncFlag>0</FuncFlag>  
-                                    </xml>";
-                    $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
-                    $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
-                    echo $resultStr;
-                    exit;
-                } else {
-                    echo "Input something...";
-                    exit;
-                }
-            }else {//其他消息类型，链接、语音等
-                //回复文本信息
-                $textTpl = "<xml>  
-                                <ToUserName><![CDATA[%s]]></ToUserName>  
-                                <FromUserName><![CDATA[%s]]></FromUserName>  
-                                <CreateTime>%s</CreateTime>  
-                                <MsgType><![CDATA[%s]]></MsgType>  
-                                <Content><![CDATA[%s]]></Content>  
-                                <FuncFlag>0</FuncFlag>  
-                                </xml>";
-                $contentStr = '消息类型：' . $MsgType . '我们还没做处理。。。。';
-                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
-                echo $resultStr;
-                exit;
-            }
-
-        }
+//        if (!empty($postStr)) {
+//            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+//            $fromUsername = $postObj->FromUserName;//发送人
+//            $toUsername = $postObj->ToUserName;//接收人
+//            $MsgType = $postObj->MsgType;//消息类型
+//            //$MsgId = $postObj->MsgId;//消息id
+//            $time = time();//当前时间做为回复时间
+//
+//            //如果是文本消息（表情属于文本信息）
+//            if ($MsgType == 'text') {
+//                $content = trim($postObj->Content);//消息内容
+//                if (!empty($content)) {
+//                    //回复文本信息
+//                    $textTpl = "<xml>
+//                                    <ToUserName><![CDATA[%s]]></ToUserName>
+//                                    <FromUserName><![CDATA[%s]]></FromUserName>
+//                                    <CreateTime>%s</CreateTime>
+//                                    <MsgType><![CDATA[%s]]></MsgType>
+//                                    <Content><![CDATA[%s]]></Content>
+//                                    <FuncFlag>0</FuncFlag>
+//                                    </xml>";
+//                    $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
+//                    $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
+//                    echo $resultStr;
+//                    exit;
+//                } else {
+//                    echo "Input something...";
+//                    exit;
+//                }
+//            }else {//其他消息类型，链接、语音等
+//                //回复文本信息
+//                $textTpl = "<xml>
+//                                <ToUserName><![CDATA[%s]]></ToUserName>
+//                                <FromUserName><![CDATA[%s]]></FromUserName>
+//                                <CreateTime>%s</CreateTime>
+//                                <MsgType><![CDATA[%s]]></MsgType>
+//                                <Content><![CDATA[%s]]></Content>
+//                                <FuncFlag>0</FuncFlag>
+//                                </xml>";
+//                $contentStr = '消息类型：' . $MsgType . '我们还没做处理。。。。';
+//                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
+//                echo $resultStr;
+//                exit;
+//            }
+//
+//        }
 
 
     }
