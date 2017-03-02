@@ -65,6 +65,7 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
+        echo "";exit;
         $this->responseMsgs();
     }
 
