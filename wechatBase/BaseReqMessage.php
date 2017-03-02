@@ -6,6 +6,7 @@
  * Time: 13:50
  */
 namespace app\wechatBase;
+use app\wechatBase\response\RespMessage;
 
 class BaseReqMessage
 {
