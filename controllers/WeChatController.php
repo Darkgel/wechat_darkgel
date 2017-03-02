@@ -7,6 +7,14 @@
  */
 namespace app\controllers;
 
+use app\wechatBase\TextMessage;
+use app\wechatBase\ImageMessage;
+use app\wechatBase\VoiceMessage;
+use app\wechatBase\VideoMessage;
+use app\wechatBase\LocationMessage;
+use app\wechatBase\LinkMessage;
+use app\wechatBase\EventMessage;
+
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
@@ -14,7 +22,7 @@ use app\models\ContactForm;
 
 class WeChatController extends Controller
 {
-    const DEBUG = true;
+    const debug = true;
     /**
      * @inheritdoc
      */
@@ -57,10 +65,7 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-//        $this->responseMsg();
-        echo "<pre>";
-        var_dump(Yii::$app->cache->get("postXml"));
-        echo "</pre>";
+        $this->responseMsg();
     }
 
     /**
@@ -167,6 +172,7 @@ class WeChatController extends Controller
 
     public function responseMsg()
     {
+        define('WEIXIN_DEBUG', $this->debug);
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
 
         if (!empty($postStr)){
@@ -189,27 +195,27 @@ class WeChatController extends Controller
     protected function handleMessage($msgType, $oMessage)
     {
         switch ($msgType) {
-//            case 'text':
-//                TextMessage::handle($oMessage);
-//                break;
-//            case 'image':
-//                ImageMessage::handle($oMessage);
-//                break;
-//            case 'voice':
-//                VoiceMessage::handle($oMessage);
-//                break;
-//            case 'video':
-//                VideoMessage::handle($oMessage);
-//                break;
-//            case 'location':
-//                LocationMessage::handle($oMessage);
-//                break;
-//            case 'link':
-//                LinkMessage::handle($oMessage);
-//                break;
-//            case 'event':
-//                EventMessage::handle($oMessage);
-//                break;
+            case 'text':
+                TextMessage::handle($oMessage);
+                break;
+            case 'image':
+                ImageMessage::handle($oMessage);
+                break;
+            case 'voice':
+                VoiceMessage::handle($oMessage);
+                break;
+            case 'video':
+                VideoMessage::handle($oMessage);
+                break;
+            case 'location':
+                LocationMessage::handle($oMessage);
+                break;
+            case 'link':
+                LinkMessage::handle($oMessage);
+                break;
+            case 'event':
+                EventMessage::handle($oMessage);
+                break;
             default:
                 echo '';
                 exit;
