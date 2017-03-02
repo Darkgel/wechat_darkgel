@@ -3,11 +3,11 @@
  * Created by PhpStorm.
  * User: michael.shi
  * Date: 2017/3/2
- * Time: 14:00
+ * Time: 14:46
  */
-namespace app\wechatBase;
+namespace app\wechatBase\response;
 
-class RespImageMessage extends BaseRespMessage
+class RespVoiceMessage extends BaseRespMessage
 {
     public function getXML($mediaId)
     {
@@ -15,10 +15,10 @@ class RespImageMessage extends BaseRespMessage
                 <ToUserName><![CDATA[%s]]></ToUserName>
                 <FromUserName><![CDATA[%s]]></FromUserName>
                 <CreateTime>%s</CreateTime>
-                <MsgType><![CDATA[image]]></MsgType>
-                <Image>
+                <MsgType><![CDATA[voice]]></MsgType>
+                <Voice>
                 <MediaId><![CDATA[%s]]></MediaId>
-                </Image>
+                </Voice>
                 </xml>";
         return sprintf($tpl, FROM_USER_NAME, TO_USER_NAME, time(), $mediaId);
     }

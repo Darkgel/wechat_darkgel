@@ -181,9 +181,6 @@ class WeChatController extends Controller
             define('TO_USER_NAME', $postObj->ToUserName);
             $msgType = $postObj->MsgType;
 
-            //将信息存储到缓存中
-            Yii::$app->cache->set("postXml",$postStr);
-
             $this->handleMessage($msgType, $postObj);
 
         }else {

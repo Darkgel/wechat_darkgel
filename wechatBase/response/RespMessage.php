@@ -5,7 +5,7 @@
  * Date: 2017/3/2
  * Time: 13:56
  */
-namespace app\wechatBase;
+namespace app\wechatBase\response;
 
 class RespMessage
 {
