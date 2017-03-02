@@ -42,6 +42,8 @@ class TextMessage extends BaseReqMessage
                     'url'=>'http://m.jfz.com'
                 )
             ));
+        }else{
+            RespMessage::replyText("hello");
         }
     }
 
