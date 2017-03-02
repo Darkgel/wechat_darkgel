@@ -221,7 +221,7 @@ class WeChatController extends Controller
 
     public function responseMsgs()
     {
-        echo "";
+        echo "";exit;
 //        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
 //        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
 //        $fromUsername = $postObj->FromUserName;//发送人
