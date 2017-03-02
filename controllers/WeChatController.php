@@ -57,10 +57,10 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-        $this->responseMsg();
-//        echo "<pre>";
-//        var_dump(Yii::$app->cache->get("postXml"));
-//        echo "</pre>";
+//        $this->responseMsg();
+        echo "<pre>";
+        var_dump(Yii::$app->cache->get("postXml"));
+        echo "</pre>";
     }
 
     /**
