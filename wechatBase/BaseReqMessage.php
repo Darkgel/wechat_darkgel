@@ -32,7 +32,7 @@ class BaseReqMessage
     }
 
     /**
-     * 如果在配置里 weixin_debug 属性没有设置为 false，且该类型消息没有处理，则输出消息属性到用户微信
+     * 如果在WeChatController里debug属性设置为true，则不做业务处理，输出消息属性到用户微信
      */
     protected function debugMessage()
     {
