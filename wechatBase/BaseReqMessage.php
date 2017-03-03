@@ -19,9 +19,9 @@ class BaseReqMessage
     //消息类型
     public $MsgType;
     private static $_instance;
-    public function __construct($oMessage)
+    public function __construct($postObj)
     {
-        foreach($oMessage as $key=>$value)
+        foreach($postObj as $key=>$value)
         {
             $this->$key = $value.'';
         }
@@ -54,10 +54,10 @@ class BaseReqMessage
 
     }
 
-    public static function handle($oMessage, $className=__CLASS__)
+    public static function handle($postObj, $className=__CLASS__)
     {
         if(self::$_instance === null){
-            self::$_instance = new $className($oMessage);
+            self::$_instance = new $className($postObj);
         }
 
         return self::$_instance;
