@@ -20,19 +20,19 @@ class TextMessage extends BaseReqMessage
                 array(
                     'title'=>'大图',
                     'description'=>'描述',
-                    'picurl'=>'https://mmbiz.qlogo.cn/mmbiz/u7HRqqgV0kMwWIDPxJ2w3A9x1PeHxQ7DTvXiaOzibjfIsANYKrfFwFcC9xBXjdJTTCncFJXHXgtQTb40ibrvAiarrQ/0',
+                    'picurl'=>'https://drscdn.500px.org/photo/126001591/m%3D900/3323bf7e2b79e5c63f6220a998f2af21',
                     'url'=>'http://m.jfz.com'
                 ),
                 array(
                     'title'=>'大图',
                     'description'=>'描述',
-                    'picurl'=>'https://mmbiz.qlogo.cn/mmbiz/u7HRqqgV0kNJKibRonH2d61Mu0KCZOmtMfTokg0RdIz2xdQ59an9YML5ibDibw2o5LSLIHff1Tv0W4iaCLU7uTmfhw/0',
+                    'picurl'=>'https://drscdn.500px.org/photo/83136235/m%3D900/e8f360801a3a55c20d7d59e982a9cdcf',
                     'url'=>'http://m.jfz.com'
                 ),
                 array(
                     'title'=>'大图',
                     'description'=>'描述',
-                    'picurl'=>'https://mmbiz.qlogo.cn/mmbiz/u7HRqqgV0kMwWIDPxJ2w3A9x1PeHxQ7DTvXiaOzibjfIsANYKrfFwFcC9xBXjdJTTCncFJXHXgtQTb40ibrvAiarrQ/0',
+                    'picurl'=>'https://drscdn.500px.org/photo/123084989/m%3D900/c79102bb35fdd864651aa56248958e8f',
                     'url'=>'http://m.jfz.com'
                 ),
                 array(
