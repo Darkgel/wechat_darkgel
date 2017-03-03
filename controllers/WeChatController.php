@@ -137,17 +137,12 @@ class WeChatController extends Controller
             $button1->sub_button = array($button1_1,$button1_2,$button1_3);
 
             $button2 = new \stdClass();
-            $button2->type = "click";
-            $button2->name = "文字游戏";
-            $button2->key = "V333_WORD_GAME";
+            $button2->type = "pic_weixin";
+            $button2->name = "发张图片";
+            $button2->key = "V333_PIC";
+            $button2->sub_button = [];
 
-            $button3 = new \stdClass();
-            $button3->type = "pic_weixin";
-            $button3->name = "发张图片";
-            $button3->key = "V333_PIC";
-            $button3->sub_button = [];
-
-            $button = array($button1, $button2, $button3);
+            $button = array($button1, $button2);
 
             $menu = new \stdClass();
             $menu->button = $button;
