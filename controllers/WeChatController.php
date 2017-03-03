@@ -22,7 +22,9 @@ use app\models\ContactForm;
 
 class WeChatController extends Controller
 {
+    //禁用csrf拦截，以使微信服务器的post请求可以通过
     public $enableCsrfValidation = false;
+    // 设置为true后不做业务处理，直接输出调试信息（即输出从微信服务器接收到的xml）
     public $debug = true;
     /**
      * @inheritdoc
@@ -50,7 +52,6 @@ class WeChatController extends Controller
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
-        $echostr = $_GET["echostr"];
 
         $token = "youarenotdarkgel";
         $tmpArr = array($token, $timestamp, $nonce);
@@ -58,15 +59,17 @@ class WeChatController extends Controller
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
 
-        if( $tmpStr == $signature ){
-            return $echostr;
+        if( $tmpStr === $signature ){
+            return true;
         }else{
             return false;
         }
     }
 
     public function actionWeChatHandler(){
-        $this->responseMsg();
+        if($this->checkSignature()){
+            $this->responseMsg();
+        }
     }
 
     /**
@@ -108,11 +111,12 @@ class WeChatController extends Controller
      * 功能：设置菜单
      * @author shiweihua
      * */
-    private function setMenu(){
-        $accessToken = $this->getAccessToken();
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$accessToken;
+    public function actionSetMenu(){
         $Token = Yii::$app->request->get('token');
         if('darkgel' == $Token) {
+            $accessToken = $this->getAccessToken();
+            $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$accessToken;
+
             $button1_1 = new \stdClass();
             $button1_1->type = "view";
             $button1_1->name = "搜狗搜索";
@@ -174,7 +178,6 @@ class WeChatController extends Controller
     public function responseMsg()
     {
         define('WEIXIN_DEBUG', $this->debug);
-        //$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         $postStr = file_get_contents("php://input");
 
         if (!empty($postStr)){
