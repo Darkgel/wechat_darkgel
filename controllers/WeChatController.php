@@ -23,7 +23,7 @@ use app\models\ContactForm;
 class WeChatController extends Controller
 {
     public $enableCsrfValidation = false;
-    const debug = true;
+    public $debug = true;
     /**
      * @inheritdoc
      */
@@ -171,48 +171,48 @@ class WeChatController extends Controller
     }
 
 
-//    public function responseMsg()
-//    {
-//        define('WEIXIN_DEBUG', $this->debug);
-//        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-//
-//        if (!empty($postStr)){
-//            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-//            define('FROM_USER_NAME', $postObj->FromUserName);
-//            define('TO_USER_NAME', $postObj->ToUserName);
-//            $msgType = $postObj->MsgType;
-//
-//            $this->handleMessage($msgType, $postObj);
-//
-//        }else {
-//            echo '';
-//            exit;
-//        }
-//    }
+    public function responseMsg()
+    {
+        define('WEIXIN_DEBUG', $this->debug);
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
 
-    protected function handleMessage($msgType, $oMessage)
+        if (!empty($postStr)){
+            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            define('FROM_USER_NAME', $postObj->FromUserName);
+            define('TO_USER_NAME', $postObj->ToUserName);
+            $msgType = $postObj->MsgType;
+
+            $this->handleMessage($msgType, $postObj);
+
+        }else {
+            echo '';
+            exit;
+        }
+    }
+
+    protected function handleMessage($msgType, $postObj)
     {
         switch ($msgType) {
             case 'text':
-                TextMessage::handle($oMessage);
+                TextMessage::handle($postObj);
                 break;
             case 'image':
-                ImageMessage::handle($oMessage);
+                ImageMessage::handle($postObj);
                 break;
             case 'voice':
-                VoiceMessage::handle($oMessage);
+                VoiceMessage::handle($postObj);
                 break;
             case 'video':
-                VideoMessage::handle($oMessage);
+                VideoMessage::handle($postObj);
                 break;
             case 'location':
-                LocationMessage::handle($oMessage);
+                LocationMessage::handle($postObj);
                 break;
             case 'link':
-                LinkMessage::handle($oMessage);
+                LinkMessage::handle($postObj);
                 break;
             case 'event':
-                EventMessage::handle($oMessage);
+                EventMessage::handle($postObj);
                 break;
             default:
                 echo '';
