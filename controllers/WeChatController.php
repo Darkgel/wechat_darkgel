@@ -25,7 +25,7 @@ class WeChatController extends Controller
     //禁用csrf拦截，以使微信服务器的post请求可以通过
     public $enableCsrfValidation = false;
     // 设置为true后不做业务处理，直接输出调试信息（即输出从微信服务器接收到的xml）
-    public $debug = true;
+    public $debug = false;
     /**
      * @inheritdoc
      */
