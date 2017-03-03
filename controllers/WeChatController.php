@@ -75,33 +75,33 @@ class WeChatController extends Controller
      * @param bool $refresh 是否刷新access_token,默认不刷新
      * @return string 返回access_token
      * */
-//    public function getAccessToken($refresh=false){
-//        $accessToken = Yii::$app->cache->get("accessToken");
-//        if($refresh||false === $accessToken){
-////            $appId = "wx65fe8c42d8a79457";
-////            $secret = "c1b26c4873f86771633a6169b6b08b6e";
-//            //测试号
-//            $appId = "wx5e168823829e9838";
-//            $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
-//            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
-//            //初始化
-//            $curl = curl_init();
-//            //设置抓取的url
-//            curl_setopt($curl, CURLOPT_URL, $url);
-//            //设置获取的信息以文件流的形式返回，而不是直接输出。
-//            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-//            //执行命令
-//            $data = curl_exec($curl);
-//            //关闭URL请求
-//            curl_close($curl);
-//            //将json格式的数据解析成数组
-//            $dataAsArray = json_decode($data,true);
-//            //缓存获得的数据
-//            Yii::$app->cache->set("accessToken",$dataAsArray['access_token'],$dataAsArray['expires_in']);
-//            return $dataAsArray['access_token'];
-//        }
-//        return $accessToken;
-//    }
+    public function getAccessToken($refresh=false){
+        $accessToken = Yii::$app->cache->get("accessToken");
+        if($refresh||false === $accessToken){
+//            $appId = "wx65fe8c42d8a79457";
+//            $secret = "c1b26c4873f86771633a6169b6b08b6e";
+            //测试号
+            $appId = "wx5e168823829e9838";
+            $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
+            //初始化
+            $curl = curl_init();
+            //设置抓取的url
+            curl_setopt($curl, CURLOPT_URL, $url);
+            //设置获取的信息以文件流的形式返回，而不是直接输出。
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            //执行命令
+            $data = curl_exec($curl);
+            //关闭URL请求
+            curl_close($curl);
+            //将json格式的数据解析成数组
+            $dataAsArray = json_decode($data,true);
+            //缓存获得的数据
+            Yii::$app->cache->set("accessToken",$dataAsArray['access_token'],$dataAsArray['expires_in']);
+            return $dataAsArray['access_token'];
+        }
+        return $accessToken;
+    }
 
 
     /**
@@ -220,78 +220,78 @@ class WeChatController extends Controller
         }
     }
 
-    public function responseMsgs()
-    {
-
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $fromUsername = $postObj->FromUserName;//发送人
-        $toUsername = $postObj->ToUserName;//接收人
-        $MsgType = $postObj->MsgType;//消息类型
-        //$MsgId = $postObj->MsgId;//消息id
-        $time = time();//当前时间做为回复时间
-        $content = "hello";
-        $textTpl = "<xml>
-                    <ToUserName><![CDATA[%s]]></ToUserName>
-                    <FromUserName><![CDATA[%s]]></FromUserName>
-                    <CreateTime>%s</CreateTime>
-                    <MsgType><![CDATA[%s]]></MsgType>
-                    <Content><![CDATA[%s]]></Content>
-                    </xml>";
-        $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
-        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $MsgType, $contentStr);
-        echo $resultStr;
-        exit;
-
-        //$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        //提取post数据
-//        if (!empty($postStr)) {
-//            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-//            $fromUsername = $postObj->FromUserName;//发送人
-//            $toUsername = $postObj->ToUserName;//接收人
-//            $MsgType = $postObj->MsgType;//消息类型
-//            //$MsgId = $postObj->MsgId;//消息id
-//            $time = time();//当前时间做为回复时间
+//    public function responseMsgs()
+//    {
 //
-//            //如果是文本消息（表情属于文本信息）
-//            if ($MsgType == 'text') {
-//                $content = trim($postObj->Content);//消息内容
-//                if (!empty($content)) {
-//                    //回复文本信息
-//                    $textTpl = "<xml>
-//                                    <ToUserName><![CDATA[%s]]></ToUserName>
-//                                    <FromUserName><![CDATA[%s]]></FromUserName>
-//                                    <CreateTime>%s</CreateTime>
-//                                    <MsgType><![CDATA[%s]]></MsgType>
-//                                    <Content><![CDATA[%s]]></Content>
-//                                    <FuncFlag>0</FuncFlag>
-//                                    </xml>";
-//                    $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
-//                    $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
-//                    echo $resultStr;
-//                    exit;
-//                } else {
-//                    echo "Input something...";
-//                    exit;
-//                }
-//            }else {//其他消息类型，链接、语音等
-//                //回复文本信息
-//                $textTpl = "<xml>
-//                                <ToUserName><![CDATA[%s]]></ToUserName>
-//                                <FromUserName><![CDATA[%s]]></FromUserName>
-//                                <CreateTime>%s</CreateTime>
-//                                <MsgType><![CDATA[%s]]></MsgType>
-//                                <Content><![CDATA[%s]]></Content>
-//                                <FuncFlag>0</FuncFlag>
-//                                </xml>";
-//                $contentStr = '消息类型：' . $MsgType . '我们还没做处理。。。。';
-//                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
-//                echo $resultStr;
-//                exit;
-//            }
+//        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+//        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+//        $fromUsername = $postObj->FromUserName;//发送人
+//        $toUsername = $postObj->ToUserName;//接收人
+//        $MsgType = $postObj->MsgType;//消息类型
+//        //$MsgId = $postObj->MsgId;//消息id
+//        $time = time();//当前时间做为回复时间
+//        $content = "hello";
+//        $textTpl = "<xml>
+//                    <ToUserName><![CDATA[%s]]></ToUserName>
+//                    <FromUserName><![CDATA[%s]]></FromUserName>
+//                    <CreateTime>%s</CreateTime>
+//                    <MsgType><![CDATA[%s]]></MsgType>
+//                    <Content><![CDATA[%s]]></Content>
+//                    </xml>";
+//        $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
+//        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $MsgType, $contentStr);
+//        echo $resultStr;
+//        exit;
 //
-//        }
-
-
-    }
+//        //$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+//        //提取post数据
+////        if (!empty($postStr)) {
+////            $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+////            $fromUsername = $postObj->FromUserName;//发送人
+////            $toUsername = $postObj->ToUserName;//接收人
+////            $MsgType = $postObj->MsgType;//消息类型
+////            //$MsgId = $postObj->MsgId;//消息id
+////            $time = time();//当前时间做为回复时间
+////
+////            //如果是文本消息（表情属于文本信息）
+////            if ($MsgType == 'text') {
+////                $content = trim($postObj->Content);//消息内容
+////                if (!empty($content)) {
+////                    //回复文本信息
+////                    $textTpl = "<xml>
+////                                    <ToUserName><![CDATA[%s]]></ToUserName>
+////                                    <FromUserName><![CDATA[%s]]></FromUserName>
+////                                    <CreateTime>%s</CreateTime>
+////                                    <MsgType><![CDATA[%s]]></MsgType>
+////                                    <Content><![CDATA[%s]]></Content>
+////                                    <FuncFlag>0</FuncFlag>
+////                                    </xml>";
+////                    $contentStr = '你发送的信息是：接收人：' . $toUsername . ',发送人:' . $fromUsername . ',消息类型：' . $MsgType . ',消息内容：' . $content;
+////                    $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
+////                    echo $resultStr;
+////                    exit;
+////                } else {
+////                    echo "Input something...";
+////                    exit;
+////                }
+////            }else {//其他消息类型，链接、语音等
+////                //回复文本信息
+////                $textTpl = "<xml>
+////                                <ToUserName><![CDATA[%s]]></ToUserName>
+////                                <FromUserName><![CDATA[%s]]></FromUserName>
+////                                <CreateTime>%s</CreateTime>
+////                                <MsgType><![CDATA[%s]]></MsgType>
+////                                <Content><![CDATA[%s]]></Content>
+////                                <FuncFlag>0</FuncFlag>
+////                                </xml>";
+////                $contentStr = '消息类型：' . $MsgType . '我们还没做处理。。。。';
+////                $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'text', $contentStr);
+////                echo $resultStr;
+////                exit;
+////            }
+////
+////        }
+//
+//
+//    }
 }
