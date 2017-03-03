@@ -6,6 +6,7 @@
  * Time: 14:14
  */
 namespace app\wechatBase;
+use app\wechatBase\response\RespMessage;
 
 class VideoMessage extends BaseReqMessage
 {

@@ -21,7 +21,7 @@ class ImageMessage extends BaseReqMessage
     {
 //        $service = new UnitnetSearchService4();
 //        $content = $service->startup();
-        $content = "这张图片正好看";
+        $content = "这张图片真好看";
         RespMessage::replyText($content);
 //         RespMessage::replyImage($this->MediaId);
     }

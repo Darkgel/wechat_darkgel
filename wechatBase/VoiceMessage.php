@@ -7,6 +7,8 @@
  */
 namespace app\wechatBase;
 
+use app\wechatBase\response\RespMessage;
+
 class VoiceMessage extends BaseReqMessage
 {
     public $MediaId;    //语音消息媒体id，可以调用多媒体文件下载接口拉取该媒体
