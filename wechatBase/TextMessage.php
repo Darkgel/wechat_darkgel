@@ -38,7 +38,7 @@ class TextMessage extends BaseReqMessage
                 array(
                     'title'=>'大图',
                     'description'=>'描述',
-                    'picurl'=>'https://mmbiz.qlogo.cn/mmbiz/u7HRqqgV0kMwWIDPxJ2w3A9x1PeHxQ7DTvXiaOzibjfIsANYKrfFwFcC9xBXjdJTTCncFJXHXgtQTb40ibrvAiarrQ/0',
+                    'picurl'=>'https://drscdn.500px.org/photo/151746351/m%3D900/04dc26c95bc49774314a54741ca87e79',
                     'url'=>'http://m.jfz.com'
                 )
             ));
