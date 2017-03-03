@@ -17,8 +17,8 @@ class ClickEventMessage extends BaseReqMessage
 
     }
 
-    public static function handle($oMessage, $className=__CLASS__)
+    public static function handle($postObj, $className=__CLASS__)
     {
-        return parent::handle($oMessage, $className);
+        return parent::handle($postObj, $className);
     }
 }

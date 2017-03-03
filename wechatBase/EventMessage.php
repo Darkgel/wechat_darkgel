@@ -19,29 +19,29 @@ class EventMessage extends BaseReqMessage
     //事件类型
     public $Event;
 
-    public static function handle($oMessage, $className=__CLASS__)
+    public static function handle($postObj, $className=__CLASS__)
     {
-        parent::handle($oMessage, $className);
+        parent::handle($postObj, $className);
 
-        switch($oMessage->Event)
+        switch($postObj->Event)
         {
             case 'subscribe':
-                SubscribeEventMessage::handle($oMessage);
+                SubscribeEventMessage::handle($postObj);
                 break;
             case 'unsubscribe':
-                UnsubscribeEventMessage::handle($oMessage);
+                UnsubscribeEventMessage::handle($postObj);
                 break;
             case 'SCAN':
-                ScanEventMessage::handle($oMessage);
+                ScanEventMessage::handle($postObj);
                 break;
             case 'LOCATION':
-                LocationEventMessage::handle($oMessage);
+                LocationEventMessage::handle($postObj);
                 break;
             case 'CLICK':
-                ClickEventMessage::handle($oMessage);
+                ClickEventMessage::handle($postObj);
                 break;
             case 'VIEW':
-                ViewEventMessage::handle($oMessage);
+                ViewEventMessage::handle($postObj);
                 break;
             default:
                 echo '';
