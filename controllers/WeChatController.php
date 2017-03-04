@@ -127,11 +127,6 @@ class WeChatController extends Controller
             $button1_2->name = "百度搜索";
             $button1_2->url = "http://www.baidu.com/";
 
-            $button1_3 = new \stdClass();
-            $button1_3->type = "view";
-            $button1_3->name = "新浪";
-            $button1_3->url = "http://www.sina.com.cn/";
-
             $button1 = new \stdClass();
             $button1->name = "网站";
             $button1->sub_button = array($button1_1,$button1_2,$button1_3);
