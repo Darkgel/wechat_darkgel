@@ -114,7 +114,7 @@ class WeChatController extends Controller
     public function actionSetMenu(){
         $Token = Yii::$app->request->get('token');
         if('darkgel' == $Token) {
-            $accessToken = $this->getAccessToken();
+            $accessToken = $this->getAccessToken(true);
             $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$accessToken;
 
             $button1_1 = new \stdClass();
