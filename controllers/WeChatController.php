@@ -72,6 +72,7 @@ class WeChatController extends Controller
             //$this->responseMsg();
             echo $_GET['echostr'];
         }
+        echo "check gitignore";
     }
 
     /**
