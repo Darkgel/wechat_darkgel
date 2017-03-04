@@ -129,7 +129,7 @@ class WeChatController extends Controller
 
             $button1 = new \stdClass();
             $button1->name = "网站";
-            $button1->sub_button = array($button1_1,$button1_2,$button1_3);
+            $button1->sub_button = array($button1_1,$button1_2);
 
             $button2 = new \stdClass();
             $button2->type = "pic_weixin";
