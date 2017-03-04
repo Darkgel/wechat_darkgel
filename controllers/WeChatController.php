@@ -81,11 +81,11 @@ class WeChatController extends Controller
     public function getAccessToken($refresh=false){
         $accessToken = Yii::$app->cache->get("accessToken");
         if($refresh||false === $accessToken){
-//            $appId = "wx65fe8c42d8a79457";
-//            $secret = "c1b26c4873f86771633a6169b6b08b6e";
+            $appId = "wx65fe8c42d8a79457";
+            $secret = "c1b26c4873f86771633a6169b6b08b6e";
             //测试号
-            $appId = "wx5e168823829e9838";
-            $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
+//            $appId = "wx5e168823829e9838";
+//            $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
             //初始化
             $curl = curl_init();
