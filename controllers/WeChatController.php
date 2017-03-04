@@ -26,8 +26,7 @@ class WeChatController extends Controller
     public $enableCsrfValidation = false;
     // 设置为true后不做业务处理，直接输出调试信息（即输出从微信服务器接收到的xml）
     public $debug = false;
-    //设置为true代表线上公众号，设置为false代表测试公众号
-    public $online = false;
+
     /**
      * @inheritdoc
      */
@@ -69,9 +68,9 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-        define('WECHAT_ONLINE',$this->online);
         if($this->checkSignature()){
-            $this->responseMsg();
+            //$this->responseMsg();
+            echo $_GET['echostr'];
         }
     }
 

@@ -18,7 +18,7 @@ class TextMessage extends BaseReqMessage
         if($this->Content == '图文'){
             RespMessage::replyNews(array(
                 array(
-                    'title'=>'大图',
+                    'title'=>'小图',
                     'description'=>'描述',
                     'picurl'=>'https://drscdn.500px.org/photo/126001591/m%3D900/3323bf7e2b79e5c63f6220a998f2af21',
                     'url'=>'http://m.jfz.com'
