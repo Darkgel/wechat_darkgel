@@ -68,8 +68,7 @@ class WeChatController extends Controller
 
     public function actionWeChatHandler(){
         if($this->checkSignature()){
-//            $this->responseMsg();
-            echo $_GET['echostr'];
+            $this->responseMsg();
         }
     }
 
