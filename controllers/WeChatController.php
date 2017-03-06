@@ -68,7 +68,7 @@ class WeChatController extends Controller
         }elseif (isset($_GET['test']) && 1 == $_GET['test']){//用于测试或进行类似菜单设置等操作
             echo "test";
             echo "<pre>";
-            var_dump($this->getUserList());
+            var_dump($this->sendTemplateMessage());
             echo "</pre>";
 
 
@@ -99,7 +99,7 @@ class WeChatController extends Controller
 
             $url = $this->wehatServerUrl."token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
 
-            $dataAsArray = $this->getDataFromCurlByGet($url);
+            $dataAsArray = $this->curlInGet($url);
             //缓存获得的数据
             Yii::$app->cache->set("accessToken",$dataAsArray['access_token'],$dataAsArray['expires_in']);
             return $dataAsArray['access_token'];
@@ -115,8 +115,8 @@ class WeChatController extends Controller
     public function actionSetMenu(){
         $Token = Yii::$app->request->get('token');
         if('darkgel' == $Token) {
-            $accessToken = $this->getAccessToken(true);
-            $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$accessToken;
+            $accessToken = $this->getAccessToken();
+            $url = $this->wehatServerUrl."menu/create?access_token=".$accessToken;
 
             $button1_1 = new \stdClass();
             $button1_1->type = "view";
@@ -142,22 +142,10 @@ class WeChatController extends Controller
 
             $menu = new \stdClass();
             $menu->button = $button;
-
-            //初始化
-            $curl = curl_init();
-            //设置抓取的url
-            curl_setopt($curl, CURLOPT_URL, $url);
-            //设置获取的信息以文件流的形式返回，而不是直接输出。
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            //设置post方式提交
-            curl_setopt($curl, CURLOPT_POST, 1);
+            
             //设置post数据
             $post_data = json_encode($menu, JSON_UNESCAPED_UNICODE);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-            //执行命令
-            $data = curl_exec($curl);
-            //关闭URL请求
-            curl_close($curl);
+            $data = $this->curlInPost($url,$post_data);
             //显示获得的数据
             print_r($data);
         }else{
@@ -232,7 +220,7 @@ class WeChatController extends Controller
     public function getUserList(){
         $accessToken = $this->getAccessToken(true);
         $url = $this->wehatServerUrl."user/get?access_token=".$accessToken;
-        return $usersAsArray = $this->getDataFromCurlByGet($url);
+        return $usersAsArray = $this->curlInGet($url);
 
     }
 
@@ -242,7 +230,7 @@ class WeChatController extends Controller
      * @param $url string 请求的url
      * @return array 由json解析来的数据，存为数组形式
      * */
-    protected function getDataFromCurlByGet($url){
+    protected function curlInGet($url){
         $curl = curl_init();
 
         //避免ssl 证书错误,作为本地测试,直接关掉验证就好
@@ -261,5 +249,71 @@ class WeChatController extends Controller
         curl_close($curl);
         //将json格式的数据解析成数组
         return $dataAsArray = json_decode($data,true);
+    }
+
+
+    protected function curlInPost($url,$postData){
+        //初始化
+        $curl = curl_init();
+
+        //避免ssl 证书错误,作为本地测试,直接关掉验证就好
+        if(!WECHAT_ONLINE){
+            curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 0 );
+            curl_setopt ( $curl, CURLOPT_SSL_VERIFYPEER, false );
+        }
+        
+        //设置抓取的url
+        curl_setopt($curl, CURLOPT_URL, $url);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        //设置post方式提交
+        curl_setopt($curl, CURLOPT_POST, 1);
+        //设置post数据
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+        //执行命令
+        $responseData = curl_exec($curl);
+        //关闭URL请求
+        curl_close($curl);
+
+        return $responseData;
+        
+    }
+
+    public function sendTemplateMessage(){
+        $accessToken = $this->getAccessToken();
+        $url = $this->wehatServerUrl."message/template/send?access_token=".$accessToken;
+
+        $hello = new \stdClass();
+        $hello->value = "欢迎来到darkgel的世界";
+        $hello->color = #173177;
+
+        $name = new \stdClass();
+        $name->value = "darkgel";
+        $name->color = "#173177";
+
+        $num = new \stdClass();
+        $num->value = "33";
+        $num->color = "#173177";
+
+        $time = new \stdClass();
+        $time->value = date("F j, Y, g:i a");
+        $time->color = "#173177";
+
+        $data = new \stdClass();
+        $data->hello = $hello;
+        $data->name = $name;
+        $data->num = $num;
+        $data->time = $time;
+
+        $template = new \stdClass();
+        $template->touser = "oGsm61E_u5tSxLwP_u1KJB5ROw88";
+        $template->template_id = "pUE-yHBo7fXVL_5_b92j9l_A2rSmRSg1u5WgE01w_FE";
+        $template->url = "";
+        $template->topcolor = "#FF0000";
+        $template->data = $data;
+
+        $postData = json_encode($template, JSON_UNESCAPED_UNICODE);
+
+        print_r($this->curlInPost($url,$postData));
     }
 }
