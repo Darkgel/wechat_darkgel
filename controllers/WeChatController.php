@@ -15,7 +15,6 @@ use app\wechatBase\LocationMessage;
 use app\wechatBase\LinkMessage;
 use app\wechatBase\EventMessage;
 
-use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 use yii\web\Controller;
 
@@ -41,6 +40,11 @@ class WeChatController extends Controller
         ];
     }
 
+    /**
+     * 功能：检验请求是真的来自微信服务器
+     * @author shiweihua
+     * @return bool
+     */
     private function checkSignature()
     {
         $signature = $_GET["signature"];
@@ -60,6 +64,10 @@ class WeChatController extends Controller
         }
     }
 
+    /**
+     * 功能：来自微信服务器的请求的处理入口
+     * @author shiweihua
+     */
     public function actionWeChatHandler(){
         if(isset($_GET['nosign']) && 1 == $_GET['nosign']){//这个用于本地的微信开发调试小工具
             $this->responseMsg();
@@ -109,7 +117,6 @@ class WeChatController extends Controller
         }
         return $accessToken;
     }
-
 
     /**
      * 功能：设置菜单
@@ -173,7 +180,7 @@ class WeChatController extends Controller
     }
 
     /**
-     *功能：接收微信服务器发过来的信息
+     *功能：响应微信服务器发过来的消息
      *@author shiwehua
      */
     public function responseMsg()
@@ -270,7 +277,13 @@ class WeChatController extends Controller
         return $dataAsArray = json_decode($data,true);
     }
 
-
+    /**
+     * 功能：通过curl的post方式来提交数据
+     * @author shiweihua
+     * @param $url string 请求提交的url
+     * @param $postData array json_encode()函数处理后的数组，作为需要提交的数据
+     * @return object 微信服务器的响应
+     * */
     protected function curlInPost($url,$postData){
         //初始化
         $curl = curl_init();
@@ -298,6 +311,10 @@ class WeChatController extends Controller
         
     }
 
+    /**
+     * 功能：发送模板消息
+     * @author shiweihua
+     * */
     public function sendTemplateMessage(){
         $accessToken = $this->getAccessToken();
         $url = $this->wehatServerUrl."message/template/send?access_token=".$accessToken;
@@ -336,6 +353,10 @@ class WeChatController extends Controller
         return $this->curlInPost($url,$postData);
     }
 
+    /**
+     * 功能：测试scope为snsapi_userinfo的第三方登录授权
+     * @author shiweihua
+     * */
     public function actionTestOauthUserInfo(){
         $code = $_GET['code'];
         $state = $_GET['state'];
@@ -368,6 +389,9 @@ class WeChatController extends Controller
         echo "state : ".$state;
     }
 
+    /**
+     * 功能：测试scope为snsapi_base的第三方登录授权
+     * */
     public function actionTestOauthBase(){
         $code = $_GET['code'];
         $state = $_GET['state'];
