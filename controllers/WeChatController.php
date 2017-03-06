@@ -66,9 +66,12 @@ class WeChatController extends Controller
             exit;
 
         }elseif (isset($_GET['test']) && 1 == $_GET['test']){//用于测试或进行类似菜单设置等操作
-            echo "test";
             echo "<pre>";
-            var_dump($this->sendTemplateMessage());
+            echo "获取用户列表";
+            print_r($this->getUserList());
+            echo "<br/>";
+            echo "发送模板信息";
+            print_r($this->sendTemplateMessage());
             echo "</pre>";
 
 
@@ -128,9 +131,25 @@ class WeChatController extends Controller
             $button1_2->name = "百度搜索";
             $button1_2->url = "http://www.baidu.com/";
 
+            $baseUrl = \urldecode("http://wechat-darkgel.s1.natapp.cc/we-chat/test-oauth-base");
+            $button1_3 = new \stdClass();
+            $button1_3->type = "view";
+            $button1_3->name = "基本授权";
+            $button1_3->url = "https://open.weixin.qq.com/connect/oauth2/authorize?"
+                            ."appid=wx5e168823829e9838&redirect_uri=".$baseUrl
+                            ."&response_type=code&scope=snsapi_base&state=33#wechat_redirect";
+
+            $highUrl = \urldecode("http://wechat-darkgel.s1.natapp.cc/we-chat/test-oauth-user-info");
+            $button1_4 = new \stdClass();
+            $button1_4->type = "view";
+            $button1_4->name = "高级授权";
+            $button1_4->url = "https://open.weixin.qq.com/connect/oauth2/authorize?"
+                            ."appid=wx5e168823829e9838&redirect_uri=".$highUrl
+                            ."&response_type=code&scope=snsapi_userinfo&state=333#wechat_redirect";
+
             $button1 = new \stdClass();
             $button1->name = "网站";
-            $button1->sub_button = array($button1_1,$button1_2);
+            $button1->sub_button = array($button1_1, $button1_2, $button1_3, $button1_4 );
 
             $button2 = new \stdClass();
             $button2->type = "pic_weixin";
@@ -314,6 +333,59 @@ class WeChatController extends Controller
 
         $postData = json_encode($template, JSON_UNESCAPED_UNICODE);
 
-        print_r($this->curlInPost($url,$postData));
+        return $this->curlInPost($url,$postData);
+    }
+
+    public function actionTestOauthUserInfo(){
+        $code = $_GET['code'];
+        $state = $_GET['state'];
+
+        //通过这个url获得授权的access_token
+        $accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?"
+                ."appid=wx5e168823829e9838"
+                ."&secret=12d9fc513e2f7e9dda45f5b6fe913d24"
+                ."&code=".$code
+                ."&grant_type=authorization_code ";
+
+        $accessData = $this->curlInGet($accessTokenUrl);
+
+        //获取access_token,openid
+        $accessToken = $accessData['access_token'];
+        $openId = $accessData['openid'];
+
+        //获取用户信息
+        $userInfoUrl = "https://api.weixin.qq.com/sns/userinfo?"
+                    ."access_token=".$accessToken
+                    ."&openid=".$openId
+                    ."&lang=zh_CN";
+
+        $userData = $this->curlInGet($userInfoUrl);
+
+        echo "<pre>";
+        var_dump($accessData);
+        var_dump($userData);
+        echo "</pre>";
+        echo "state : ".$state;
+    }
+
+    public function actionTestOauthBase(){
+        $code = $_GET['code'];
+        $state = $_GET['state'];
+
+        //通过这个url获得授权的access_token
+        $accessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?"
+            ."appid=wx5e168823829e9838"
+            ."&secret=12d9fc513e2f7e9dda45f5b6fe913d24"
+            ."&code=".$code
+            ."&grant_type=authorization_code ";
+
+        $accessData = $this->curlInGet($accessTokenUrl);
+
+        echo "<pre>";
+        var_dump($accessData);
+        echo "</pre>";
+        echo "state : ".$state;
+
+
     }
 }
