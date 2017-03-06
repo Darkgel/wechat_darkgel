@@ -65,7 +65,7 @@ class WeChatController extends Controller
             $this->responseMsg();
             exit;
 
-        }elseif (isset($_GET['test']) && 1 == $_GET['test']){
+        }elseif (isset($_GET['test']) && 1 == $_GET['test']){//用于测试或进行类似菜单设置等操作
             echo "test";
             echo "<pre>";
             var_dump($this->getAccessToken(true));
@@ -98,9 +98,16 @@ class WeChatController extends Controller
                 $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
             }
 
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
+            $url = $this->wehatServerUrl."token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
             //初始化
             $curl = curl_init();
+
+            //避免ssl 证书错误,作为本地测试,直接关掉验证就好
+            if(!WECHAT_ONLINE){
+                curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 0 );
+                curl_setopt ( $curl, CURLOPT_SSL_VERIFYPEER, false );
+            }
+
             //设置抓取的url
             curl_setopt($curl, CURLOPT_URL, $url);
             //设置获取的信息以文件流的形式返回，而不是直接输出。
@@ -236,9 +243,13 @@ class WeChatController extends Controller
     public function getUserList(){
         $accessToken = $this->getAccessToken();
         $url = $this->wehatServerUrl."user/get?access_token=".$accessToken;
-        //$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
         //初始化
         $curl = curl_init();
+        //ssl 证书错误,作为本地测试,直接关掉验证就好
+        if(!WECHAT_ONLINE){
+            curl_setopt ( $curl, CURLOPT_SSL_VERIFYHOST, 0 );
+            curl_setopt ( $curl, CURLOPT_SSL_VERIFYPEER, false );
+        }
         //设置抓取的url
         curl_setopt($curl, CURLOPT_URL, $url);
         //设置获取的信息以文件流的形式返回，而不是直接输出。
