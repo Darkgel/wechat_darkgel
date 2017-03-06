@@ -66,14 +66,16 @@ class WeChatController extends Controller
             exit;
 
         }elseif (isset($_GET['test']) && 1 == $_GET['test']){
-            echo "hello";
+            echo "test";
             echo "<pre>";
+            var_dump($this->getAccessToken(true));
             var_dump($this->getUserList());
             echo "</pre>";
 
+
         }elseif($this->checkSignature()){
-            $this->responseMsg();
-            //echo $_GET['echostr']
+            //$this->responseMsg();
+            echo $_GET['echostr'];
         }
     }
 
@@ -85,7 +87,7 @@ class WeChatController extends Controller
      * */
     public function getAccessToken($refresh=false){
         $accessToken = Yii::$app->cache->get("accessToken");
-        if($refresh||false === $accessToken){
+        if($refresh || false === $accessToken){
             if(WECHAT_ONLINE){
                 //线上公众号
                 $appId = "wx65fe8c42d8a79457";
@@ -96,7 +98,7 @@ class WeChatController extends Controller
                 $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
             }
 
-            $url = $this->wehatServerUrl."token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
             //初始化
             $curl = curl_init();
             //设置抓取的url
@@ -138,7 +140,7 @@ class WeChatController extends Controller
             $button1_2->url = "http://www.baidu.com/";
 
             $button1 = new \stdClass();
-            $button1->name = "网站";
+            $button1->name = "错误的";
             $button1->sub_button = array($button1_1,$button1_2);
 
             $button2 = new \stdClass();
@@ -234,6 +236,7 @@ class WeChatController extends Controller
     public function getUserList(){
         $accessToken = $this->getAccessToken();
         $url = $this->wehatServerUrl."user/get?access_token=".$accessToken;
+        //$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN";
         //初始化
         $curl = curl_init();
         //设置抓取的url
@@ -242,6 +245,7 @@ class WeChatController extends Controller
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         //执行命令
         $data = curl_exec($curl);
+        var_dump($data);
         //关闭URL请求
         curl_close($curl);
         //将json格式的数据解析成数组
