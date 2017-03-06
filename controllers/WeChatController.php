@@ -245,7 +245,6 @@ class WeChatController extends Controller
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         //执行命令
         $data = curl_exec($curl);
-        var_dump($data);
         //关闭URL请求
         curl_close($curl);
         //将json格式的数据解析成数组
