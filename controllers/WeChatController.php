@@ -27,6 +27,8 @@ class WeChatController extends Controller
     // 设置为true后不做业务处理，直接输出调试信息（即输出从微信服务器接收到的xml）
     public $debug = false;
 
+    public $wehatServerUrl = "https://api.weixin.qq.com/cgi-bin/";
+
     /**
      * @inheritdoc
      */
@@ -39,15 +41,6 @@ class WeChatController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
     private function checkSignature()
     {
         $signature = $_GET["signature"];
@@ -71,9 +64,16 @@ class WeChatController extends Controller
         if(isset($_GET['nosign']) && 1 == $_GET['nosign']){//这个用于本地的微信开发调试小工具
             $this->responseMsg();
             exit;
+
+        }elseif (isset($_GET['test']) && 1 == $_GET['test']){
+            echo "hello";
+            echo "<pre>";
+            var_dump($this->getUserList());
+            echo "</pre>";
+
         }elseif($this->checkSignature()){
             $this->responseMsg();
-            //echo $_GET['echostr'];
+            //echo $_GET['echostr']
         }
     }
 
@@ -96,7 +96,7 @@ class WeChatController extends Controller
                 $secret = "12d9fc513e2f7e9dda45f5b6fe913d24";
             }
 
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
+            $url = $this->wehatServerUrl."token?grant_type=client_credential&appid=".$appId."&secret=".$secret;
             //初始化
             $curl = curl_init();
             //设置抓取的url
@@ -174,7 +174,10 @@ class WeChatController extends Controller
         }
     }
 
-
+    /**
+     *功能：接收微信服务器发过来的信息
+     *@author shiwehua
+     */
     public function responseMsg()
     {
         define('WEIXIN_DEBUG', $this->debug);
@@ -194,6 +197,10 @@ class WeChatController extends Controller
         }
     }
 
+    /**
+     * 功能：按类型处理微信服务器发过来的信息
+     * @author shiweihua
+     * */
     protected function handleMessage($msgType, $postObj)
     {
         switch ($msgType) {
@@ -224,5 +231,23 @@ class WeChatController extends Controller
         }
     }
 
+    public function getUserList(){
+        $accessToken = $this->getAccessToken();
+        $url = $this->wehatServerUrl."user/get?access_token=".$accessToken;
+        //初始化
+        $curl = curl_init();
+        //设置抓取的url
+        curl_setopt($curl, CURLOPT_URL, $url);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        //执行命令
+        $data = curl_exec($curl);
+        //关闭URL请求
+        curl_close($curl);
+        //将json格式的数据解析成数组
+        $dataAsArray = json_decode($data,true);
+        //返回获得的数据
+        return $dataAsArray;
 
+    }
 }
