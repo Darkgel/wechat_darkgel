@@ -68,7 +68,10 @@ class WeChatController extends Controller
     }
 
     public function actionWeChatHandler(){
-        if($this->checkSignature()){
+        if(isset($_GET['nosign']) && 1 == $_GET['nosign']){//这个用于本地的微信开发调试小工具
+            $this->responseMsg();
+            exit;
+        }elseif($this->checkSignature()){
             $this->responseMsg();
             //echo $_GET['echostr'];
         }

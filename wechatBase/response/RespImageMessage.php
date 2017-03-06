@@ -11,15 +11,15 @@ class RespImageMessage extends BaseRespMessage
 {
     public function getXML($mediaId)
     {
-        $tpl = "<xml>
-                <ToUserName><![CDATA[%s]]></ToUserName>
-                <FromUserName><![CDATA[%s]]></FromUserName>
-                <CreateTime>%s</CreateTime>
-                <MsgType><![CDATA[image]]></MsgType>
-                <Image>
-                <MediaId><![CDATA[%s]]></MediaId>
-                </Image>
-                </xml>";
+        $tpl = "<xml>\r\n"
+            ."  <ToUserName><![CDATA[%s]]></ToUserName>\r\n"
+            ."  <FromUserName><![CDATA[%s]]></FromUserName>\r\n"
+            ."  <CreateTime>%s</CreateTime>\r\n"
+            ."  <MsgType><![CDATA[image]]></MsgType>\r\n"
+            ."  <Image>\r\n"
+            ."      <MediaId><![CDATA[%s]]></MediaId>\r\n"
+            ."  </Image>\r\n"
+            ."</xml>";
         return sprintf($tpl, FROM_USER_NAME, TO_USER_NAME, time(), $mediaId);
     }
 }

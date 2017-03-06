@@ -13,25 +13,27 @@ class RespNewsMessage extends BaseRespMessage
     {
         $articleCount = count($message);
         $items = $this->packageItems($message);
-        $tpl = "<xml>
-                <ToUserName><![CDATA[%s]]></ToUserName>
-                <FromUserName><![CDATA[%s]]></FromUserName>
-                <CreateTime>%s</CreateTime>
-                <MsgType><![CDATA[news]]></MsgType>
-                <ArticleCount>%s</ArticleCount>
-                <Articles>%s</Articles>
-                </xml>";
+        $tpl = "<xml>\r\n"
+                ."  <ToUserName><![CDATA[%s]]></ToUserName>\r\n"
+                ."  <FromUserName><![CDATA[%s]]></FromUserName>\r\n"
+                ."  <CreateTime>%s</CreateTime>\r\n"
+                ."  <MsgType><![CDATA[news]]></MsgType>\r\n"
+                ."  <ArticleCount>%s</ArticleCount>\r\n"
+                ."  <Articles>\r\n"
+                ."%s"
+                ."  </Articles>\r\n"
+                ."</xml>";
         return sprintf($tpl, FROM_USER_NAME, TO_USER_NAME, time(), $articleCount, $items);
     }
 
     protected function packageItems($items)
     {
-        $itemTpl = "<item>
-                    <Title><![CDATA[%s]]></Title>
-                    <Description><![CDATA[%s]]></Description>
-                    <PicUrl><![CDATA[%s]]></PicUrl>
-                    <Url><![CDATA[%s]]></Url>
-                    </item>";
+        $itemTpl = "    <item>\r\n"
+                    ."      <Title><![CDATA[%s]]></Title>\r\n"
+                    ."      <Description><![CDATA[%s]]></Description>\r\n"
+                    ."      <PicUrl><![CDATA[%s]]></PicUrl>\r\n"
+                    ."      <Url><![CDATA[%s]]></Url>\r\n"
+                    ."  </item>\r\n";
         $ret = '';
         foreach($items as $item)
         {
